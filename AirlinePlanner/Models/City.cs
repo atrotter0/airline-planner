@@ -127,5 +127,22 @@ namespace AirlinePlanner.Models
                 conn.Dispose();
             }
         }
+
+        public void Delete()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM cities WHERE id = @CityId;";
+            cmd.Parameters.AddWithValue("@CityId", this.Id);
+            cmd.ExecuteNonQuery();
+            // delete flights with same city_id reference
+            conn.Close();
+
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
     }
 }

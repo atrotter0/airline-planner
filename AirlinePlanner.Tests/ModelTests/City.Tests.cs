@@ -76,7 +76,7 @@ namespace AirlinePlanner.Tests
         }
 
         [TestMethod]
-        public void Update_UpdatesColumnInDatabase_StylistList()
+        public void Update_UpdatesColumnInDatabase_CityList()
         {
             City city = new City("PDX", 1);
             city.Save();
@@ -85,6 +85,19 @@ namespace AirlinePlanner.Tests
             List<City> allCities = City.GetAll();
             List<City> expectedList = new List<City>{ city };
             CollectionAssert.AreEqual(expectedList, allCities);
+        }
+
+        [TestMethod]
+        public void Delete_DeletesCityFromDb_CityList()
+        {
+            City city = new City("PDX");
+            City city2 = new City("SEA");
+            city.Save();
+            city2.Save();
+            city.Delete();
+            List<City> expectedList = new List<City> { city2 };
+            List<City> actualList = City.GetAll();
+            CollectionAssert.AreEqual(expectedList, actualList);
         }
     }
 }
