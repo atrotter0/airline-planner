@@ -144,5 +144,52 @@ namespace AirlinePlanner.Models
                 conn.Dispose();
             }
         }
+
+        public void AddFlight(Flight newFlight)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO cities_flights (city_id, flight_id) VALUES (@CityId, @FlightId);";
+            cmd.Parameters.AddWithValue("@CityId", this.Id);
+            cmd.Parameters.AddWithValue("@FlightId", newFlight.Id);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
+        public List<Flight> GetFlights()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT flights.* FROM cities
+                JOIN cities_flights ON (cities.id = cities_flights.city_id)
+                JOIN flights ON (cities_flights.flight_id = flights.id)
+                WHERE cities.id = @CityId;";
+            cmd.Parameters.AddWithValue("@CityId", this.Id);
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            List<Flight> flights = new List<Flight> {};
+            while(rdr.Read())
+            {
+                int flightId = rdr.GetInt32(0);
+                string flightAirlinerCode = rdr.GetString(1);
+                string flightArriveDepart = rdr.GetString(2);
+                DateTime flightDateTime = rdr.GetDateTime(3);
+                string flightStatus = rdr.GetString(4);
+                Flight newFlight = new Flight(flightAirlinerCode, flightArriveDepart, flightDateTime, flightStatus, flightId);
+                flights.Add(newFlight);
+            }
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return flights;
+        }
+
     }
 }
