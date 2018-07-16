@@ -27,5 +27,13 @@ namespace AirlinePlanner.Tests
             Assert.AreEqual("SEA", city.AirportCode);
             Assert.AreEqual(2, city.Id);
         }
+
+        [TestMethod]
+        public void Equals_ReturnsTrueIfPropertiesAreSame_True()
+        {
+            City city = new City("PDX");
+            City cityTwo = new City("PDX");
+            Assert.AreEqual(cityTwo, city);
+        }
     }
 }

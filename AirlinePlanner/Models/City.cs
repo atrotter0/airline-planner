@@ -14,5 +14,20 @@ namespace AirlinePlanner.Models
         {
             AirportCode = code;
         }
+
+        public override bool Equals(System.Object otherCity)
+        {
+            if (!(otherCity is City))
+            {
+                return false;
+            }
+            else
+            {
+                City city = (City) otherCity;
+                bool idEquality = (this.Id == city.Id);
+                bool airportCodeEquality = (this.AirportCode == city.AirportCode);
+                return (idEquality && airportCodeEquality);
+            }
+        }
     }
 }
