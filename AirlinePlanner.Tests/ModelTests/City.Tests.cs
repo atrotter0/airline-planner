@@ -35,5 +35,12 @@ namespace AirlinePlanner.Tests
             City cityTwo = new City("PDX");
             Assert.AreEqual(cityTwo, city);
         }
+
+        [TestMethod]
+        public void GetAll_DbStartsEmpty_True()
+        {
+            int result = City.GetAll().Count;
+            Assert.AreEqual(0, result);
+        }
     }
 }
