@@ -13,6 +13,7 @@ namespace AirlinePlanner.Models
         public City(string code, int id = 0)
         {
             AirportCode = code;
+            Id = id;
         }
 
         public override bool Equals(System.Object otherCity)
@@ -52,6 +53,37 @@ namespace AirlinePlanner.Models
                 conn.Dispose();
             }
             return allCities;
+        }
+
+        public static void DeleteAll()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM cities;";
+            cmd.ExecuteNonQuery();
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
+        public void Save()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO cities (airport_code) VALUES (@AirportCode);";
+            cmd.Parameters.AddWithValue("@AirportCode", this.AirportCode);
+            cmd.ExecuteNonQuery();
+            this.Id = (int) cmd.LastInsertedId;
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
         }
     }
 }
