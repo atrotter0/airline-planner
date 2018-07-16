@@ -125,5 +125,37 @@ namespace AirlinePlanner.Tests
             List<City> expectedList = new List<City> { city };
             CollectionAssert.AreEqual(expectedList, actualList);
         }
+
+        [TestMethod]
+        public void GetCities_ReturnsAllFlightCities_CityList()
+        {
+            DateTime dateAndTime = new DateTime(2018, 07, 16, 12, 25, 0);
+            Flight flight = new Flight("11X", "Arrive", dateAndTime, Flight.StatusCodes["onTime"]);
+            City city = new City("PDX");
+            City city2 = new City("SEA");
+            flight.Save();
+            city.Save();
+            city2.Save();
+            flight.AddCity(city);
+            List<City> actualList = flight.GetCities();
+            List<City> expectedList = new List<City> { city };
+            CollectionAssert.AreEqual(expectedList, actualList);
+
+        }
+
+        [TestMethod]
+        public void Delete_DeletesCityFromJoinTable_CityList()
+        {
+            City city = new City("PDX");
+            DateTime dateAndTime = new DateTime(2018, 07, 16, 12, 25, 0);
+            Flight flight = new Flight("11X", "Arrive", dateAndTime, Flight.StatusCodes["onTime"]);
+            city.Save();
+            flight.Save();
+            flight.AddCity(city);
+            flight.Delete();
+            List<City> actualList = flight.GetCities();
+            List<City> expectedList = new List<City> {};
+            CollectionAssert.AreEqual(expectedList, actualList);
+        }
     }
 }

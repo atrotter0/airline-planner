@@ -158,10 +158,9 @@ namespace AirlinePlanner.Models
             MySqlConnection conn = DB.Connection();
             conn.Open();
             var cmd = conn.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"DELETE FROM flights WHERE id = @FlightId;";
+            cmd.CommandText = @"DELETE FROM flights WHERE id = @FlightId; DELETE FROM cities_flights WHERE flight_id = @FlightId";
             cmd.Parameters.AddWithValue("@FlightId", this.Id);
             cmd.ExecuteNonQuery();
-            // delete flights with same flight_id reference
             conn.Close();
 
             if (conn != null)
