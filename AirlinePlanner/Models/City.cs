@@ -85,5 +85,31 @@ namespace AirlinePlanner.Models
                 conn.Dispose();
             }
         }
+
+        public static City Find(int id)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM cities WHERE id = @SearchId;";
+            cmd.Parameters.AddWithValue("@SearchId", id);
+            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+            int cityId = 0;
+            string cityAirportCode = "";
+            while (rdr.Read())
+            {
+                 cityId = rdr.GetInt32(0);
+                 cityAirportCode = rdr.GetString(1);
+            }
+            City foundCity = new City(cityAirportCode, cityId);
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return foundCity;
+        }
     }
 }
