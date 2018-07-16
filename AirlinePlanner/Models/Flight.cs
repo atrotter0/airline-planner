@@ -12,6 +12,7 @@ namespace AirlinePlanner.Models
         public string ArriveDepart { get; set; }
         public DateTime Time { get; set; }
         public string Status { get; set; }
+        public static Dictionary<string, string> StatusCodes = new Dictionary<string, string> { { "onTime", "On Time" }, { "delayed", "Delayed" }, { "cancelled", "Cancelled" } };
 
         public Flight(string code, string arriveDepart, DateTime time, string status, int id = 0)
         {
@@ -56,7 +57,7 @@ namespace AirlinePlanner.Models
                 DateTime flightDateTime = rdr.GetDateTime(3);
                 string flightStatus = rdr.GetString(4);
                 Flight flight = new Flight(flightAirlineCode, flightArriveDepart, flightDateTime, flightStatus, flightId);
-                allCities.Add(flight);
+                allFlights.Add(flight);
             }
             conn.Close();
 
@@ -88,7 +89,7 @@ namespace AirlinePlanner.Models
             conn.Open();
             MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
             cmd.CommandText = @"INSERT INTO flights (airliner_code, arrive_depart, time, status) VALUES (@AirlinerCode, @ArriveDepart, @Time, @Status);";
-            cmd.Parameters.AddWithValue("@AirportCode", this.AirlinerCode);
+            cmd.Parameters.AddWithValue("@AirlinerCode", this.AirlinerCode);
             cmd.Parameters.AddWithValue("@ArriveDepart", this.ArriveDepart);
             cmd.Parameters.AddWithValue("@Time", this.Time);
             cmd.Parameters.AddWithValue("@Status", this.Status);
@@ -117,11 +118,11 @@ namespace AirlinePlanner.Models
             string flightStatus = "";
             while (rdr.Read())
             {
-                int flightId = rdr.GetInt32(0);
-                string flightAirlineCode = rdr.GetString(1);
-                string flightArriveDepart = rdr.GetString(2);
-                DateTime flightDateTime = rdr.GetDateTime(3);
-                string flightStatus = rdr.GetString(4);
+                flightId = rdr.GetInt32(0);
+                flightAirlineCode = rdr.GetString(1);
+                flightArriveDepart = rdr.GetString(2);
+                flightDateTime = rdr.GetDateTime(3);
+                flightStatus = rdr.GetString(4);
             }
             Flight foundFlight = new Flight(flightAirlineCode, flightArriveDepart, flightDateTime, flightStatus, flightId);
 
