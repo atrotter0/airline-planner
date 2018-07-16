@@ -169,5 +169,49 @@ namespace AirlinePlanner.Models
                 conn.Dispose();
             }
         }
+
+        public void AddCity(City newCity)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO cities_flights (city_id, flight_id) VALUES (@CityId, @FlightId);";
+            cmd.Parameters.AddWithValue("@CityId", newCity.Id);
+            cmd.Parameters.AddWithValue("@FlightId", this.Id);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
+        public List<City> GetCities()
+        {
+            List<City> cities = new List<City> {};
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT cities.* FROM flights
+                JOIN cities_flights ON (flights.id = cities_flights.flight_id)
+                JOIN cities ON (cities_flights.city_id = cities.id)
+                WHERE flights.id = @FlightId;";
+            cmd.Parameters.AddWithValue("@FlightId", this.Id);
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while(rdr.Read())
+            {
+                int cityId = rdr.GetInt32(0);
+                string cityName = rdr.GetString(1);
+                City city = new City(cityName, cityId);
+                cities.Add(city);
+            }
+            conn.Close();
+
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return cities;
+        }
     }
 }

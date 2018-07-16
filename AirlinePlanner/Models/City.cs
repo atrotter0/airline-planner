@@ -136,7 +136,6 @@ namespace AirlinePlanner.Models
             cmd.CommandText = @"DELETE FROM cities WHERE id = @CityId; DELETE FROM cities_flights WHERE city_id = @CityId;";
             cmd.Parameters.AddWithValue("@CityId", this.Id);
             cmd.ExecuteNonQuery();
-            // delete flights with same city_id reference
             conn.Close();
 
             if (conn != null)

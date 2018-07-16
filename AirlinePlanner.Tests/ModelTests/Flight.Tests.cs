@@ -111,5 +111,19 @@ namespace AirlinePlanner.Tests
             List<Flight> actualList = Flight.GetAll();
             CollectionAssert.AreEqual(expectedList, actualList);
         }
+
+        [TestMethod]
+        public void AddCity_AddsCityToJoinTable_CityList()
+        {
+            DateTime dateAndTime = new DateTime(2018, 07, 16, 12, 25, 0);
+            Flight flight = new Flight("11X", "Arrive", dateAndTime, Flight.StatusCodes["onTime"]);
+            City city = new City("PDX");
+            flight.Save();
+            city.Save();
+            flight.AddCity(city);
+            List<City> actualList = flight.GetCities();
+            List<City> expectedList = new List<City> { city };
+            CollectionAssert.AreEqual(expectedList, actualList);
+        }
     }
 }
