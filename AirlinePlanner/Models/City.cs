@@ -111,5 +111,21 @@ namespace AirlinePlanner.Models
             }
             return foundCity;
         }
+
+        public void Update()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"UPDATE cities SET airport_code = @cityAirportCode WHERE id = @CityId;";
+            cmd.Parameters.AddWithValue("@cityAirportCode", this.AirportCode);
+            cmd.Parameters.AddWithValue("@CityId", this.Id);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
     }
 }

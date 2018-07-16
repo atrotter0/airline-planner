@@ -74,5 +74,17 @@ namespace AirlinePlanner.Tests
             City foundCity = City.Find(city.Id);
             Assert.AreEqual(city, foundCity);
         }
+
+        [TestMethod]
+        public void Update_UpdatesColumnInDatabase_StylistList()
+        {
+            City city = new City("PDX", 1);
+            city.Save();
+            city.AirportCode = "SEA";
+            city.Update();
+            List<City> allCities = City.GetAll();
+            List<City> expectedList = new List<City>{ city };
+            CollectionAssert.AreEqual(expectedList, allCities);
+        }
     }
 }
