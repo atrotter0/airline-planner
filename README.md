@@ -1,18 +1,12 @@
-# Project Name Here
+# Airline Planner
 
-#### Epicodus C# exercise, date
+#### Epicodus C# exercise, 07.16.18
 
-#### By Your Name Here
+#### By Abel Trotter & Ryan Murry
 
 ## Description
 
-Add a description here
-
-## Specs
-
-| Behavior | Input | Output |
-|----------|-------|--------|
-| Behavior | input | output |
+A .NET web app that allows a user to add a city and flights to practice many-to-many SQL relationships and join tables.
 
 ## Setup on OSX
 
@@ -42,12 +36,8 @@ Add a description here
 * JavaScript
 * jQuery 3.3.1
 
-## Links
-
-* Add links here
-
 ## License
 
 This software is licensed under the MIT license.
 
-Copyright (c) 2018 **Your Name Here**
+Copyright (c) 2018 **Abel Trotter & Ryan Murry**
